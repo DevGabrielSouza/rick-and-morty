@@ -27,8 +27,7 @@ export default async function CharacterPage({
     return (
       <CharacterNotFound className="text-center text-2xl font-semibold h-screen flex-col gap-2 items-center justify-center">
         Character not found
-        {/* back button */}
-        <Button variant="default" className="ml-4">
+        <Button variant="secondary" className="ml-4">
           <Link href="/">Back</Link>
         </Button>
       </CharacterNotFound>
@@ -69,26 +68,10 @@ export default async function CharacterPage({
       <CharacterInfoSection>
         <h2 className="text-xl font-semibold">Origin</h2>
         <p>{character.origin.name}</p>
-        <Link
-          className="text-blue-600 hover:underline"
-          href={character.origin.url}
-          target="_blank"
-          rel="noreferrer"
-        >
-          View Origin Location
-        </Link>
       </CharacterInfoSection>
       <CharacterInfoSection>
         <h2 className="text-xl font-semibold">Last Known Location</h2>
         <p>{character.location.name}</p>
-        <Link
-          className="text-blue-600 hover:underline"
-          href={character.location.url}
-          target="_blank"
-          rel="noreferrer"
-        >
-          View Last Location
-        </Link>
       </CharacterInfoSection>
       <CharacterInfoSection>
         <h2 className="text-xl font-semibold">Episodes</h2>
@@ -98,38 +81,22 @@ export default async function CharacterPage({
             if (match) {
               const episodeNumber = match[0];
               return (
-                <Link
-                  href={`/episode/${episodeNumber}`}
-                  key={episodeNumber}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Badge className="w-20 text-center flex justify-center">
-                    {episodeNumber}
-                  </Badge>
-                </Link>
+                <Badge className="w-20 text-center flex justify-center">
+                  {episodeNumber}
+                </Badge>
               );
             }
           })}
         </div>
       </CharacterInfoSection>
+
       <CharacterInfoSection>
-        <h2 className="text-xl font-semibold">More Info</h2>
-        <Link
-          className="text-blue-600 hover:underline"
-          href={character.url}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Character Profile
-        </Link>
-      </CharacterInfoSection>
-      <CharacterInfoSection>
-        <p className="text-sm text-gray-600">Created on: 2017-12-01</p>
+        <h2 className="text-xl font-semibold">Created on</h2>
+        <p>{new Date(character.created).toLocaleDateString("en-US")}</p>
       </CharacterInfoSection>
 
       <CharacterInfoSection>
-        <Button variant="default">
+        <Button variant="secondary">
           <Link href="/">Back</Link>
         </Button>
       </CharacterInfoSection>
