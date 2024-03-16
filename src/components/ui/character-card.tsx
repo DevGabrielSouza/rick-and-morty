@@ -37,9 +37,7 @@ export function CharacterInfo({
           {status}
         </span>
       </p>
-      <p className="text-sm font-medium flex items-center gap-1">
-        <span className="font-semibold">Last seen:</span> {dimension}
-      </p>
+      <p className="text-sm font-medium flex items-center gap-1">{dimension}</p>
       <p className="text-sm font-medium flex items-center gap-1">
         {episodes} episodes
       </p>
