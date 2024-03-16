@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 export type SearchFormGenericProps<T = unknown> = {
   children: React.ReactNode;
   className?: string;
-  handleSubmit: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 } & T;
 
 export function SearchForm({

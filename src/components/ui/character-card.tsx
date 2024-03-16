@@ -1,5 +1,6 @@
 import { CardContent, Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface CharacterInfoProps {
   name: string;
@@ -53,7 +54,7 @@ export type CharacterImageProps = {
 export function CharacterImage({ src, alt }: CharacterImageProps) {
   return (
     <div className="overflow-hidden rounded-t-xl">
-      <img alt={alt} height={400} src={src} width={400} />
+      <Image alt={alt} height={400} src={src} width={400} />
     </div>
   );
 }
