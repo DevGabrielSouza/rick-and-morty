@@ -81,7 +81,10 @@ export default async function CharacterPage({
             if (match) {
               const episodeNumber = match[0];
               return (
-                <Badge className="w-20 text-center flex justify-center">
+                <Badge
+                  className="w-20 text-center flex justify-center"
+                  key={episode}
+                >
                   {episodeNumber}
                 </Badge>
               );
