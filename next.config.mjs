@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    domains: ["rickandmortyapi.com"],
-  },
-};
+    images: {
+        domains: ['rickandmortyapi.com'],
+    },
+    experimental: {
+        missingSuspenseWithCSRBailout: false,
+    },
+}
 
-export default nextConfig;
+export default nextConfig
