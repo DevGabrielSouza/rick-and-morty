@@ -69,7 +69,7 @@ export function CharacterProvider({ children }: CharacterContextProps) {
                 dispatch({ type: 'setCharacters', payload: response.results })
                 dispatch({ type: 'setInfo', payload: response.info })
             })
-    }, [page, search, status])
+    }, [page, search, status, dispatch, router])
     return (
         <CharacterContext.Provider value={{ state, dispatch }}>
             {children}
