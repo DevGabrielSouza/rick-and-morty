@@ -60,7 +60,7 @@ export default function Home() {
                     }
                 )
             })
-    }, [page])
+    }, [page, searchParam, statusParam, dispatch, router])
 
     const form = useForm<CharacterData>()
     form.setValue('search', searchParam)
