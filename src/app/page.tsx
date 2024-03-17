@@ -171,7 +171,7 @@ export default function Home() {
                         </Link>
                     ))}
             </div>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center mt-4">
                 {info && info.pages > 1 && (
                     <Pagination
                         pages={info.pages}
