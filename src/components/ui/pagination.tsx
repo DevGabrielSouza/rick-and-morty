@@ -52,7 +52,7 @@ export default function Pagination({
                 <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => onPageChange(page + 1)}
+                    onClick={() => onPageChange(currentPage + 1)}
                     disabled={currentPage === pages}
                 >
                     Next
