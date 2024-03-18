@@ -107,6 +107,50 @@ To get a local copy up and running follow these simple example steps.
     npm run dev
     ```
 
+## Running Tests
+
+This project uses Jest and React Testing Library for testing. To run the tests, follow these steps:
+
+1. Install the project dependencies if you haven't done so already:
+
+    ```sh
+    npm install
+    ```
+
+    or
+
+    ```sh
+    yarn install
+    ```
+
+2. Run the tests:
+
+    ```sh
+    npm run test
+    ```
+
+    or
+
+    ```sh
+    yarn test
+    ```
+
+This will run all the tests in the project and display the results in the terminal.
+
+### If you want to run tests in watch mode (tests will re-run whenever a file changes), you can use:
+
+```sh
+npm run test:watch
+```
+
+### If you want to see a coverage report, you can use:
+
+```sh
+npm run test:coverage
+```
+
+This will create a coverage report in the coverage directory in the project root. You can view the report by opening coverage/lcov-report/index.html in your web browser.
+
 <!-- ROADMAP -->
 
 ## Roadmap
