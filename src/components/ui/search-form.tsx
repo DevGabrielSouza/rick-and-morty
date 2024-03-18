@@ -48,7 +48,6 @@ export type SearchFormGroupGenericProps<T = unknown> = {
 export function SearchFormGroup({
     children,
     className,
-    ...props
 }: SearchFormGroupGenericProps) {
     return <div className={cn(['flex'], className)}>{children}</div>
 }
@@ -61,7 +60,6 @@ export type SearchFormButtonGenericProps<T = unknown> = {
 export function SearchFormButton({
     children,
     className,
-    ...props
 }: SearchFormButtonGenericProps) {
     return <div className={className}>{children}</div>
 }

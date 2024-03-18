@@ -1,4 +1,4 @@
-import { CardContent, Card } from '@/components/ui/card'
+import { CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 

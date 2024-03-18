@@ -1,7 +1,6 @@
-import { Character } from "./Character";
-import { Filter } from "./Filter";
+import { Character } from './Character'
+import { Info } from './Info'
 
-export type Action = {
-  type: string;
-  payload: any;
-};
+export type Action =
+    | { type: 'setCharacters'; payload: Character[] }
+    | { type: 'setInfo'; payload: Info }

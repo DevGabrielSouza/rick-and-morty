@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import {
     CharacterBadges,
     CharacterHeader,
@@ -7,7 +6,6 @@ import {
     CharacterProfileImage,
     getRemoteCharacter,
 } from '@/components/ui/character'
-import Link from 'next/link'
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'

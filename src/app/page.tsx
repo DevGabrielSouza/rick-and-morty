@@ -13,7 +13,7 @@ import {
     SearchFormGroup,
     SearchFormFilter,
 } from '@/components/ui/search-form'
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { toast } from '@/components/ui/use-toast'
@@ -89,7 +89,7 @@ export default function Home() {
                     title: 'Error',
                     description:
                         'An error occurred while fetching the characters',
-                    className: 'bg-red-700 text-white',
+                    className: 'bg-red-700 text-white border-none',
                 })
             }
         }, 500)

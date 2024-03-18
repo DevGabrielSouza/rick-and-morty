@@ -19,8 +19,8 @@ interface CharacterContextProps {
 }
 
 const initialState = {
+    characters: [] as Character[],
     info: {} as Info,
-    characters: [],
 }
 
 function reducer(state: typeof initialState, action: Action) {
@@ -36,7 +36,8 @@ function reducer(state: typeof initialState, action: Action) {
 
 interface CharacterContextValue {
     state: typeof initialState
-    dispatch: (action: { type: string; payload: Character[] | Info }) => void
+    // eslint-disable-next-line no-unused-vars
+    dispatch: (action: Action) => void
 }
 
 export const CharacterContext = createContext<
