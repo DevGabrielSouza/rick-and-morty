@@ -56,7 +56,7 @@
 
 ## About The Project
 
-![product-screenshot](public/screenshot.jpg)
+![product-screenshot](public/app_screenshot.jpg)
 
 ### Built With
 
@@ -84,7 +84,6 @@ To get a local copy up and running follow these simple example steps.
 #### npm
 
 -   For Linux users:
-
 
     ```sh
     sudo npm install npm@latest -g
