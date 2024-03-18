@@ -2,6 +2,15 @@ import { AxiosResponse, ResponseType } from 'axios'
 
 export type HttpMethod = 'post' | 'get' | 'put' | 'delete'
 
+export type HttpRequest = {
+    url: string
+    method: HttpMethod
+    body?: any
+    headers?: any
+    params?: any
+    responseType?: ResponseType | undefined
+}
+
 export enum HttpStatusCode {
     created = 201,
     ok = 200,
