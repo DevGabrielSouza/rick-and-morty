@@ -55,8 +55,8 @@ export default function Home() {
     useEffect(() => {
         if (page === 0) return
         const fetchCharacters = async () => {
+            setLoading(true)
             try {
-                setLoading(true)
                 const response = await makeRemoteGetCharacters(
                     page,
                     searchParam,
@@ -70,11 +70,12 @@ export default function Home() {
                         scroll: false,
                     }
                 )
-                setLoading(false)
+
                 setError(null)
             } catch (error: any) {
                 setError(error.message)
             }
+            setLoading(false)
         }
         fetchCharacters()
     }, [page, searchParam, statusParam, dispatch, router])
@@ -85,8 +86,8 @@ export default function Home() {
 
     const handleSubmit = form.handleSubmit(
         debounce(async (data: CharacterData) => {
+            setLoading(true)
             try {
-                setLoading(true)
                 const response = await makeRemoteGetCharacters(
                     0,
                     data.search,
@@ -103,7 +104,7 @@ export default function Home() {
                         scroll: false,
                     }
                 )
-                setLoading(false)
+
                 setError(null)
             } catch (error: any) {
                 setError(error.message)
@@ -116,6 +117,7 @@ export default function Home() {
                     }
                 )
             }
+            setLoading(false)
         }, 500)
     )
 
