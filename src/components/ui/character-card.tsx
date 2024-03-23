@@ -62,7 +62,13 @@ export type CharacterImageProps = {
 export function CharacterImage({ src, alt }: CharacterImageProps) {
     return (
         <div className="overflow-hidden rounded-t-xl">
-            <Image alt={alt} height={400} src={src} width={400} />
+            <Image
+                alt={alt}
+                height={400}
+                src={src}
+                width={400}
+                loading="lazy"
+            />
         </div>
     )
 }
