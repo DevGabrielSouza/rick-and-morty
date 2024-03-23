@@ -27,15 +27,6 @@ export default async function CharacterPage({
     try {
         const character = await getRemoteCharacter(characterId)
 
-        if (!character.name) {
-            return (
-                <CharacterNotFound className="text-center text-2xl font-semibold h-screen flex-col gap-2 items-center justify-center">
-                    Character not found
-                    <BackButton />
-                </CharacterNotFound>
-            )
-        }
-
         return (
             <div className="max-w-2xl mx-auto my-10 p-6 bg-white rounded-lg shadow-md">
                 <CharacterHeader>
@@ -115,12 +106,12 @@ export default async function CharacterPage({
                 </CharacterInfoSection>
             </div>
         )
-    } catch (error) {
+    } catch (error: any) {
         return (
             <CharacterNotFound className="text-center text-2xl font-semibold h-screen flex-col gap-2 items-center justify-center">
                 <MainTitle>Character not found</MainTitle>
                 <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                    Oops! The character you are looking for could not be found.
+                    {error.message}
                 </p>
                 <Link href="/">
                     <Button variant="outline">Go back home</Button>

@@ -3,8 +3,12 @@ import { cn } from '@/lib/utils'
 import React from 'react'
 
 export async function getRemoteCharacter(characterId: string) {
-    const character = await makeRemoteGetCharacter(characterId).get()
-    return character
+    try {
+        const character = await makeRemoteGetCharacter(characterId).get()
+        return character
+    } catch (error: any) {
+        throw new Error(error.message)
+    }
 }
 
 export type CharacterGenericProps<T = unknown> = {
