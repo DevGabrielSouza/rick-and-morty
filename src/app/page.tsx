@@ -28,6 +28,9 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import GridResults from '@/components/ui/grid-results'
 import { Badge } from '@/components/ui/badge'
 import BadgeContainer from '@/components/ui/badger-container'
+import Loading from '@/components/ui/loading'
+import ErrorMessage from '@/components/ui/error-message'
+import InfoMessage from '@/components/ui/info-message'
 interface CharacterData {
     search: string
     status?: string
@@ -171,41 +174,18 @@ export default function Home() {
                 </SearchForm>
             </div>
 
-            {loading && (
-                <BadgeContainer className="flex justify-center my-4">
-                    <Badge
-                        variant="outline"
-                        className="bg-sky-200 text-sky-800"
-                    >
-                        Loading...
-                    </Badge>
-                </BadgeContainer>
-            )}
+            {loading && <Loading />}
 
-            {error && (
-                <BadgeContainer className="flex justify-center my-4">
-                    <Badge
-                        variant="outline"
-                        className="bg-red-200 text-red-800"
-                    >
-                        {error}
-                    </Badge>
-                </BadgeContainer>
-            )}
+            {error && <ErrorMessage>{error}</ErrorMessage>}
 
             {!error && !loading && (
                 <div>
                     {info && info.count && (
-                        <BadgeContainer>
-                            <Badge
-                                variant="outline"
-                                className="bg-sky-200 text-sky-800"
-                            >
-                                {info.count}{' '}
-                                {info.count === 1 ? 'character' : 'characters'}{' '}
-                                found
-                            </Badge>
-                        </BadgeContainer>
+                        <InfoMessage>
+                            {info.count}{' '}
+                            {info.count === 1 ? 'character' : 'characters'}{' '}
+                            found
+                        </InfoMessage>
                     )}{' '}
                     <GridResults>
                         {characters &&
