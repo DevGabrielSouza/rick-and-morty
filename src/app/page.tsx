@@ -36,11 +36,12 @@ interface CharacterData {
 export default function Home() {
     const router = useRouter()
     const { state, dispatch } = useCharacterContext()
-    const [page, setPage] = useState<number>(1)
 
     const { searchParam, statusParam, pageParam } = extractSearchParams(
         useSearchParams()
     )
+
+    const [page, setPage] = useState<number>(pageParam || 1)
 
     const availableStatusFilters = [
         { id: 'all', name: 'All', value: '' },
@@ -50,7 +51,7 @@ export default function Home() {
     ]
 
     useEffect(() => {
-        if (page === 1) return
+        if (page === 0) return
         makeRemoteGetCharacters(page, searchParam, statusParam)
             .get()
             .then((response) => {
@@ -73,16 +74,17 @@ export default function Home() {
         debounce(async (data: CharacterData) => {
             try {
                 const response = await makeRemoteGetCharacters(
-                    page,
+                    0,
                     data.search,
                     data.status
                 ).get()
                 dispatch({ type: 'setCharacters', payload: response.results })
                 dispatch({ type: 'setInfo', payload: response.info })
+                setPage(0)
                 router.push(
                     `?search=${data.search}&status=${
                         data.status || ''
-                    }&page=${page}`,
+                    }&page=${0}`,
                     {
                         scroll: false,
                     }
