@@ -37,6 +37,7 @@ export default function Home() {
     const router = useRouter()
     const { state, dispatch } = useCharacterContext()
     const [error, setError] = useState<string | null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const { searchParam, statusParam, pageParam } = extractSearchParams(
         useSearchParams()
@@ -55,6 +56,7 @@ export default function Home() {
         if (page === 0) return
         const fetchCharacters = async () => {
             try {
+                setLoading(true)
                 const response = await makeRemoteGetCharacters(
                     page,
                     searchParam,
@@ -68,6 +70,7 @@ export default function Home() {
                         scroll: false,
                     }
                 )
+                setLoading(false)
                 setError(null)
             } catch (error: any) {
                 setError(error.message)
@@ -83,6 +86,7 @@ export default function Home() {
     const handleSubmit = form.handleSubmit(
         debounce(async (data: CharacterData) => {
             try {
+                setLoading(true)
                 const response = await makeRemoteGetCharacters(
                     0,
                     data.search,
@@ -99,6 +103,7 @@ export default function Home() {
                         scroll: false,
                     }
                 )
+                setLoading(false)
                 setError(null)
             } catch (error: any) {
                 setError(error.message)
@@ -164,6 +169,17 @@ export default function Home() {
                 </SearchForm>
             </div>
 
+            {loading && (
+                <BadgeContainer className="flex justify-center my-4">
+                    <Badge
+                        variant="outline"
+                        className="bg-sky-200 text-sky-800"
+                    >
+                        Loading...
+                    </Badge>
+                </BadgeContainer>
+            )}
+
             {error && (
                 <BadgeContainer className="flex justify-center my-4">
                     <Badge
@@ -175,7 +191,7 @@ export default function Home() {
                 </BadgeContainer>
             )}
 
-            {!error && (
+            {!error && !loading && (
                 <div>
                     {info && info.count && (
                         <BadgeContainer>
