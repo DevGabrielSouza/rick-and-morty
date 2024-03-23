@@ -23,6 +23,8 @@ import { debounce } from 'lodash'
 import { useCharacterContext } from './contexts/CharacterContext'
 import Pagination from '@/components/ui/pagination'
 import { useRouter, useSearchParams } from 'next/navigation'
+import GridResults from '@/components/ui/grid-results'
+import { Badge } from '@/components/ui/badge'
 interface CharacterData {
     search: string
     status?: string
@@ -47,7 +49,6 @@ export default function Home() {
 
     useEffect(() => {
         if (page === 1) return
-
         makeRemoteGetCharacters(page, searchParam, statusParam)
             .get()
             .then((response) => {
@@ -84,11 +85,10 @@ export default function Home() {
                         scroll: false,
                     }
                 )
-            } catch (error) {
+            } catch (error: any) {
                 toast({
                     title: 'Error',
-                    description:
-                        'An error occurred while fetching the characters',
+                    description: error.message,
                     className: 'bg-red-700 text-white border-none',
                 })
             }
@@ -145,40 +145,54 @@ export default function Home() {
                 </SearchForm>
             </div>
 
-            <div className="grid cols-1 xl:cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 ">
-                {characters &&
-                    characters.map((character: Character) => (
-                        <Link
-                            href={`/character/${character.id}`}
-                            key={character.id}
+            <div>
+                {info && info.count && (
+                    <div className="flex justify-center my-4 ">
+                        <Badge
+                            variant="outline"
+                            className="bg-sky-200 text-sky-800"
                         >
-                            <CharacterCard
+                            {info.count}{' '}
+                            {info.count === 1 ? 'character' : 'characters'}{' '}
+                            found
+                        </Badge>
+                    </div>
+                )}{' '}
+                <GridResults>
+                    {characters &&
+                        characters.map((character: Character) => (
+                            <Link
+                                href={`/character/${character.id}`}
                                 key={character.id}
-                                className="border border-gray-200 rounded-xl shadow-sm"
                             >
-                                <CharacterImage
-                                    src={character.image}
-                                    alt={character.name}
-                                />
-                                <CharacterInfo
-                                    name={character.name}
-                                    status={character.status}
-                                    dimension={character.location.name}
-                                    episodes={character.episode.length}
-                                    className="p-2"
-                                />
-                            </CharacterCard>
-                        </Link>
-                    ))}
-            </div>
-            <div className="flex flex-col items-center justify-center mt-4">
-                {info && info.pages > 1 && (
-                    <Pagination
-                        pages={info.pages}
-                        currentPage={pageParam}
-                        onPageChange={setPage}
-                    />
-                )}
+                                <CharacterCard
+                                    key={character.id}
+                                    className="border border-gray-200 rounded-xl shadow-sm"
+                                >
+                                    <CharacterImage
+                                        src={character.image}
+                                        alt={character.name}
+                                    />
+                                    <CharacterInfo
+                                        name={character.name}
+                                        status={character.status}
+                                        dimension={character.location.name}
+                                        episodes={character.episode.length}
+                                        className="p-2"
+                                    />
+                                </CharacterCard>
+                            </Link>
+                        ))}
+                </GridResults>
+                <div className="flex flex-col items-center justify-center mt-4">
+                    {info && info.pages > 1 && (
+                        <Pagination
+                            pages={info.pages}
+                            currentPage={pageParam}
+                            onPageChange={setPage}
+                        />
+                    )}
+                </div>
             </div>
         </main>
     )
