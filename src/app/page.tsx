@@ -16,7 +16,6 @@ import {
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
-import { toast } from '@/components/ui/use-toast'
 import { Character } from '@/types/Character'
 import { makeRemoteGetCharacters } from '@/lib/characters'
 import { debounce } from 'lodash'
@@ -28,6 +27,7 @@ import Pagination from '@/components/ui/pagination'
 import { useRouter, useSearchParams } from 'next/navigation'
 import GridResults from '@/components/ui/grid-results'
 import { Badge } from '@/components/ui/badge'
+import BadgeContainer from '@/components/ui/badger-container'
 interface CharacterData {
     search: string
     status?: string
@@ -36,6 +36,7 @@ interface CharacterData {
 export default function Home() {
     const router = useRouter()
     const { state, dispatch } = useCharacterContext()
+    const [error, setError] = useState<string | null>(null)
 
     const { searchParam, statusParam, pageParam } = extractSearchParams(
         useSearchParams()
@@ -52,9 +53,13 @@ export default function Home() {
 
     useEffect(() => {
         if (page === 0) return
-        makeRemoteGetCharacters(page, searchParam, statusParam)
-            .get()
-            .then((response) => {
+        const fetchCharacters = async () => {
+            try {
+                const response = await makeRemoteGetCharacters(
+                    page,
+                    searchParam,
+                    statusParam
+                ).get()
                 dispatch({ type: 'setCharacters', payload: response.results })
                 dispatch({ type: 'setInfo', payload: response.info })
                 router.push(
@@ -63,7 +68,12 @@ export default function Home() {
                         scroll: false,
                     }
                 )
-            })
+                setError(null)
+            } catch (error: any) {
+                setError(error.message)
+            }
+        }
+        fetchCharacters()
     }, [page, searchParam, statusParam, dispatch, router])
 
     const form = useForm<CharacterData>()
@@ -89,12 +99,17 @@ export default function Home() {
                         scroll: false,
                     }
                 )
+                setError(null)
             } catch (error: any) {
-                toast({
-                    title: 'Error',
-                    description: error.message,
-                    className: 'bg-red-700 text-white border-none',
-                })
+                setError(error.message)
+                router.push(
+                    `?search=${data.search}&status=${
+                        data.status || ''
+                    }&page=${0}`,
+                    {
+                        scroll: false,
+                    }
+                )
             }
         }, 500)
     )
@@ -149,55 +164,68 @@ export default function Home() {
                 </SearchForm>
             </div>
 
-            <div>
-                {info && info.count && (
-                    <div className="flex justify-center my-4 ">
-                        <Badge
-                            variant="outline"
-                            className="bg-sky-200 text-sky-800"
-                        >
-                            {info.count}{' '}
-                            {info.count === 1 ? 'character' : 'characters'}{' '}
-                            found
-                        </Badge>
-                    </div>
-                )}{' '}
-                <GridResults>
-                    {characters &&
-                        characters.map((character: Character) => (
-                            <Link
-                                href={`/character/${character.id}`}
-                                key={character.id}
+            {error && (
+                <BadgeContainer className="flex justify-center my-4">
+                    <Badge
+                        variant="outline"
+                        className="bg-red-200 text-red-800"
+                    >
+                        {error}
+                    </Badge>
+                </BadgeContainer>
+            )}
+
+            {!error && (
+                <div>
+                    {info && info.count && (
+                        <BadgeContainer>
+                            <Badge
+                                variant="outline"
+                                className="bg-sky-200 text-sky-800"
                             >
-                                <CharacterCard
+                                {info.count}{' '}
+                                {info.count === 1 ? 'character' : 'characters'}{' '}
+                                found
+                            </Badge>
+                        </BadgeContainer>
+                    )}{' '}
+                    <GridResults>
+                        {characters &&
+                            characters.map((character: Character) => (
+                                <Link
+                                    href={`/character/${character.id}`}
                                     key={character.id}
-                                    className="border border-gray-200 rounded-xl shadow-sm"
                                 >
-                                    <CharacterImage
-                                        src={character.image}
-                                        alt={character.name}
-                                    />
-                                    <CharacterInfo
-                                        name={character.name}
-                                        status={character.status}
-                                        dimension={character.location.name}
-                                        episodes={character.episode.length}
-                                        className="p-2"
-                                    />
-                                </CharacterCard>
-                            </Link>
-                        ))}
-                </GridResults>
-                <div className="flex flex-col items-center justify-center mt-4">
-                    {info && info.pages > 1 && (
-                        <Pagination
-                            pages={info.pages}
-                            currentPage={pageParam}
-                            onPageChange={setPage}
-                        />
-                    )}
+                                    <CharacterCard
+                                        key={character.id}
+                                        className="border border-gray-200 rounded-xl shadow-sm"
+                                    >
+                                        <CharacterImage
+                                            src={character.image}
+                                            alt={character.name}
+                                        />
+                                        <CharacterInfo
+                                            name={character.name}
+                                            status={character.status}
+                                            dimension={character.location.name}
+                                            episodes={character.episode.length}
+                                            className="p-2"
+                                        />
+                                    </CharacterCard>
+                                </Link>
+                            ))}
+                    </GridResults>
+                    <div className="flex flex-col items-center justify-center mt-4">
+                        {info && info.pages > 1 && (
+                            <Pagination
+                                pages={info.pages}
+                                currentPage={pageParam}
+                                onPageChange={setPage}
+                            />
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
         </main>
     )
 }

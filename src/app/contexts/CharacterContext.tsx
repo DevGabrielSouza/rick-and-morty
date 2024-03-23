@@ -13,7 +13,7 @@ import { Character } from '@/types/Character'
 import { makeRemoteGetCharacters } from '@/lib/characters'
 import { Action } from '@/types/Action'
 import { Info } from '@/types/Info'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 interface CharacterContextProps {
     children: ReactNode
@@ -45,8 +45,8 @@ async function fetchCharacters(
         ).get()
         dispatch({ type: 'setCharacters', payload: response.results })
         dispatch({ type: 'setInfo', payload: response.info })
-    } catch (error) {
-        console.error('Error fetching characters:', error)
+    } catch (error: any) {
+        new Error(error.message)
     }
 }
 
