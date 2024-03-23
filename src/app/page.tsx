@@ -20,7 +20,10 @@ import { toast } from '@/components/ui/use-toast'
 import { Character } from '@/types/Character'
 import { makeRemoteGetCharacters } from '@/lib/characters'
 import { debounce } from 'lodash'
-import { useCharacterContext } from './contexts/CharacterContext'
+import {
+    extractSearchParams,
+    useCharacterContext,
+} from './contexts/CharacterContext'
 import Pagination from '@/components/ui/pagination'
 import { useRouter, useSearchParams } from 'next/navigation'
 import GridResults from '@/components/ui/grid-results'
@@ -35,10 +38,9 @@ export default function Home() {
     const { state, dispatch } = useCharacterContext()
     const [page, setPage] = useState<number>(1)
 
-    const searchParams = useSearchParams()
-    const searchParam = searchParams.get('search') || ''
-    const statusParam = searchParams.get('status') || ''
-    const pageParam = Number(searchParams.get('page')) || 1
+    const { searchParam, statusParam, pageParam } = extractSearchParams(
+        useSearchParams()
+    )
 
     const availableStatusFilters = [
         { id: 'all', name: 'All', value: '' },

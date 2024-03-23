@@ -5,6 +5,7 @@ import {
     useReducer,
     ReactNode,
     useEffect,
+    useRef,
 } from 'react'
 
 import { Character } from '@/types/Character'
@@ -23,6 +24,32 @@ const initialState = {
     info: {} as Info,
 }
 
+export function extractSearchParams(searchParams: URLSearchParams) {
+    const searchParam = searchParams.get('search') || ''
+    const statusParam = searchParams.get('status') || ''
+    const pageParam = Number(searchParams.get('page')) || 1
+    return { searchParam, statusParam, pageParam }
+}
+
+async function fetchCharacters(
+    page: number,
+    search: string,
+    status: string,
+    dispatch: ({}: Action) => void
+) {
+    try {
+        const response = await makeRemoteGetCharacters(
+            page,
+            search,
+            status
+        ).get()
+        dispatch({ type: 'setCharacters', payload: response.results })
+        dispatch({ type: 'setInfo', payload: response.info })
+    } catch (error) {
+        console.error('Error fetching characters:', error)
+    }
+}
+
 function reducer(state: typeof initialState, action: Action) {
     switch (action.type) {
         case 'setCharacters':
@@ -36,8 +63,7 @@ function reducer(state: typeof initialState, action: Action) {
 
 interface CharacterContextValue {
     state: typeof initialState
-    // eslint-disable-next-line no-unused-vars
-    dispatch: (action: Action) => void
+    dispatch: ({}: Action) => void
 }
 
 export const CharacterContext = createContext<
@@ -56,21 +82,20 @@ export function useCharacterContext() {
 
 export function CharacterProvider({ children }: CharacterContextProps) {
     const [state, dispatch] = useReducer(reducer, initialState)
-    const router = useRouter()
+    const initialRender = useRef(true)
 
-    const searchParams = useSearchParams()
-    const search = searchParams.get('search') || ''
-    const status = searchParams.get('status') || ''
-    const page = Number(searchParams.get('page')) || 1
+    const { searchParam, statusParam, pageParam } = extractSearchParams(
+        useSearchParams()
+    )
 
     useEffect(() => {
-        makeRemoteGetCharacters(page, search, status)
-            .get()
-            .then((response) => {
-                dispatch({ type: 'setCharacters', payload: response.results })
-                dispatch({ type: 'setInfo', payload: response.info })
-            })
-    }, [page, search, status, dispatch, router])
+        if (initialRender.current) {
+            initialRender.current = false
+            return
+        }
+        fetchCharacters(pageParam, searchParam, statusParam, dispatch)
+    }, [pageParam, searchParam, statusParam, dispatch])
+
     return (
         <CharacterContext.Provider value={{ state, dispatch }}>
             {children}
